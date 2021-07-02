@@ -1,10 +1,10 @@
 package agora
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -56,9 +56,17 @@ func NewRequest(opts ...Option) *Request {
 
 // 发起请求
 func (self *Request) Do(uri, method string,
-	payload io.Reader, r func(req *http.Request),
+	body interface{}, r func(req *http.Request),
 	resp func(resp *http.Response) error, ret interface{}) error {
 
+	var payload *bytes.Reader
+	if body != nil {
+		raw, err := json.Marshal(body)
+		if err != nil {
+			return err
+		}
+		payload = bytes.NewReader(raw)
+	}
 	request, err := http.NewRequest(method, uri, payload)
 	if err != nil {
 		return err

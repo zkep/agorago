@@ -1,8 +1,6 @@
 package agora
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -43,11 +41,7 @@ func NewCloudRecording(opts ...RecordOption) *CloudRecording {
 // 获取resource ID
 func (self *CloudRecording) Acquire(req CommonRequest, ret *AcquireResponse) error {
 	uri := fmt.Sprintf(CLOUD_RECORDING_ACQUIRE_URL, self.req.appid)
-	raw, err := json.Marshal(req)
-	if err != nil {
-		return err
-	}
-	err = self.req.Do(uri, http.MethodPost, bytes.NewReader(raw), nil, nil, ret)
+	err := self.req.Do(uri, http.MethodPost, req, nil, nil, ret)
 	if err != nil {
 		return err
 	}
@@ -57,11 +51,7 @@ func (self *CloudRecording) Acquire(req CommonRequest, ret *AcquireResponse) err
 // 开启云端录制
 func (self *CloudRecording) Start(resourceId, mode string, req StartRequest, ret *StartResponse) error {
 	uri := fmt.Sprintf(CLOUD_RECORDING_START_URL, self.req.appid, resourceId, mode)
-	raw, err := json.Marshal(req)
-	if err != nil {
-		return err
-	}
-	err = self.req.Do(uri, http.MethodPost, bytes.NewReader(raw), nil, nil, ret)
+	err := self.req.Do(uri, http.MethodPost, req, nil, nil, ret)
 	if err != nil {
 		return err
 	}
@@ -72,11 +62,7 @@ func (self *CloudRecording) Start(resourceId, mode string, req StartRequest, ret
 func (self *CloudRecording) Stop(resourceId, sid, mode string, req CommonRequest, ret *StopResponse) error {
 	uri := fmt.Sprintf(CLOUD_RECORDING_STOP_URL, self.req.appid, resourceId, sid, mode)
 	req.ClientRequest = struct{}{}
-	raw, err := json.Marshal(req)
-	if err != nil {
-		return err
-	}
-	err = self.req.Do(uri, http.MethodPost, bytes.NewReader(raw), nil, nil, ret)
+	err := self.req.Do(uri, http.MethodPost, req, nil, nil, ret)
 	if err != nil {
 		return err
 	}
@@ -86,11 +72,7 @@ func (self *CloudRecording) Stop(resourceId, sid, mode string, req CommonRequest
 // 更新订阅名单
 func (self *CloudRecording) Update(resourceId, sid, mode string, req UpdateRequest, ret *UpdateResponse) error {
 	uri := fmt.Sprintf(CLOUD_RECORDING_UPDATE_URL, self.req.appid, resourceId, sid, mode)
-	raw, err := json.Marshal(req)
-	if err != nil {
-		return err
-	}
-	err = self.req.Do(uri, http.MethodPost, bytes.NewReader(raw), nil, nil, ret)
+	err := self.req.Do(uri, http.MethodPost, req, nil, nil, ret)
 	if err != nil {
 		return err
 	}
@@ -100,11 +82,7 @@ func (self *CloudRecording) Update(resourceId, sid, mode string, req UpdateReque
 // 更新合流布局
 func (self *CloudRecording) UpdateLayOut(resourceId, sid, mode string, req UpdateLayOutRequest, ret *UpdateResponse) error {
 	uri := fmt.Sprintf(CLOUD_RECORDING_UPDATE_LAYOUT_URL, self.req.appid, resourceId, sid, mode)
-	raw, err := json.Marshal(req)
-	if err != nil {
-		return err
-	}
-	err = self.req.Do(uri, http.MethodPost, bytes.NewReader(raw), nil, nil, ret)
+	err := self.req.Do(uri, http.MethodPost, req, nil, nil, ret)
 	if err != nil {
 		return err
 	}
