@@ -1,4 +1,4 @@
-package agora
+package agorago
 
 import (
 	"fmt"
@@ -31,11 +31,11 @@ func AddRequest(req *Request) RecordOption {
 }
 
 func NewCloudRecording(opts ...RecordOption) *CloudRecording {
-	recording := &CloudRecording{}
+	r := &CloudRecording{}
 	for _, opt := range opts {
-		opt(recording)
+		opt(r)
 	}
-	return recording
+	return r
 }
 
 // 获取resource ID
