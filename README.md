@@ -1,38 +1,22 @@
 # agorago
 根据声网restfulapi接口的go版本实现
 
-
-```golang
-func (d *decodeState) objects() error {
-	oi := d.objectInterface()
-	l := list.New()
-	l.PushBack(oi)
-	typename := "Obj"
-	for e := l.Front(); e != nil; e = e.Next() {
-		if oiface, ok := e.Value.(map[string]interface{}); ok {
-			d.WriteString("\ntype " + typename + " struct{\n")
-			for k, v := range oiface {
-				vr := reflect.ValueOf(v)
-				kind := vr.Kind().String()
-				switch vr.Kind() {
-				case reflect.Map:
-					l.PushBack(v)
-					kind = getFieldsName(k, "_", FirstToUpper)
-					typename = kind
-				case reflect.Slice:
-					kind = "[]"
-					// ai := d.arrayInterface()
-				default:
-				}
-				upper := getFieldsName(k, "_", FirstToUpper)
-				lower := getFieldsName(k, "_", FirstToLower)
-				line := "\t" + upper + "\t" + kind + "\t`" + `json:"` + lower + `"` + "`\n"
-				d.WriteString(line)
-			}
-			d.WriteString("}\n")
-		}
-	}
-	fmt.Println(d.String())
-	return nil
-}
+```
+    ├── LICENSE
+    ├── README.md
+    ├── access_token.go     
+    ├── cloud_recording.go
+    ├── cloud_recording_test.go
+    ├── cloud_recording_types.go
+    ├── generate       // 根据声网swagger的yaml文档生成对应的golang代码
+    │   ├── README.md
+    │   ├── g_api.go         
+    │   ├── g_api_docs.go    
+    │   ├── g_api_test.go   // 测试
+    │   ├── server_restfulapi_cn.yaml    // 测试yaml文件
+    │   └── swagger.go     // swagger文件解析
+    ├── go.mod
+    ├── go.sum
+    ├── request.go   
+    └── token_builder.go
 ```
