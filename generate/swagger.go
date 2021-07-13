@@ -128,9 +128,15 @@ type Propertie struct {
 
 // Response as they are returned from executing this operation.
 type Response struct {
-	Description string  `json:"description" yaml:"description"`
-	Schema      *Schema `json:"schema,omitempty" yaml:"schema,omitempty"`
-	Ref         string  `json:"$ref,omitempty" yaml:"$ref,omitempty"`
+	Description string                 `json:"description" yaml:"description"`
+	Schema      *Schema                `json:"schema,omitempty" yaml:"schema,omitempty"`
+	Ref         string                 `json:"$ref,omitempty" yaml:"$ref,omitempty"`
+	Content     map[string]RespContent `json:"content,omitempty" yaml:"content,omitempty"`
+}
+
+type RespContent struct {
+	Schema  *Schema     `json:"schema,omitempty" yaml:"schema,omitempty"`
+	Example interface{} `json:"example,omitempty" yaml:"example,omitempty"`
 }
 
 // Security Allows the definition of a security scheme that can be used by the operations

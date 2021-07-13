@@ -7,14 +7,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type Request struct {
 	appid       string
 	secret      string
 	credentials string
+	host        string
 	client      *http.Client
 }
+
+const (
+	AGORA_API = "https://api.agora.io/"
+)
 
 type Option func(*Request)
 
@@ -28,6 +34,12 @@ func SetKeyAndSecret(appid, secret string) Option {
 func SetClient(client *http.Client) Option {
 	return func(request *Request) {
 		request.client = client
+	}
+}
+
+func SetHost(host string) Option {
+	return func(request *Request) {
+		request.host = host
 	}
 }
 
@@ -51,6 +63,9 @@ func NewRequest(opts ...Option) *Request {
 	if len(req.credentials) == 0 {
 		req.credentials = base64.StdEncoding.EncodeToString([]byte(req.appid + ":" + req.secret))
 	}
+	if len(req.host) == 0 {
+		req.host = AGORA_API
+	}
 	return req
 }
 
@@ -59,6 +74,9 @@ func (self *Request) Do(uri, method string,
 	body interface{}, r func(req *http.Request),
 	resp func(resp *http.Response) error, ret interface{}) error {
 
+	if !strings.HasPrefix(uri, self.host) {
+		uri = self.host + uri
+	}
 	var payload *bytes.Reader
 	if body != nil {
 		raw, err := json.Marshal(body)
